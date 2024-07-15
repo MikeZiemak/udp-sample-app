@@ -1,0 +1,11 @@
+**/bin/
+*.bak
+*.tmp
+
+
+# Test binary, test result
+*.test
+
+# OS stuff
+.DS_Store
+
