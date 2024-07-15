@@ -4,7 +4,7 @@ WORKDIR /app
 COPY go.mod /
 RUN go mod download
 COPY . .
-RUN go build -o web_interface .
+RUN GOOS=linux GOARCH=arm64 go build -o web_interface .
 
 FROM gcr.io/distroless/static:nonroot-arm64
 WORKDIR /app
