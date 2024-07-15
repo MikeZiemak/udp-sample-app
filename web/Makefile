@@ -2,16 +2,13 @@ BINARY_NAME=udp-client
 BUILD_DIR=bin
 SRC_DIR=.
 ARCH=arm64
-VERSION=$(shell git describe --tags --always)
-COMMIT=$(shell git rev-parse HEAD)
-DATE=$(shell date +%Y-%m-%dT%H:%M:%S%z)
-LDFLAGS="-X main.Version=${VERSION} -X main.Commit=${COMMIT} -X main.Date=${DATE}"
+LOCAL_OS=darwin
 
 all: build
 
 build:
 	@echo "Building the binary..."
-	GOOS=linux GOARCH=${ARCH} go build -ldflags ${LDFLAGS} -o ${BUILD_DIR}/${BINARY_NAME} ${SRC_DIR}
+	GOOS=${LOCAL_OS} GOARCH=${ARCH} go build -o ${BUILD_DIR}/${BINARY_NAME} ${SRC_DIR}
 
 clean:
 	@echo "Cleaning the build directory..."
