@@ -2,13 +2,30 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net"
+	"os"
+	"strconv"
 )
 
+func GetEnv(key, defaultValue string) string {
+	value, ok := os.LookupEnv(key)
+	if !ok {
+		return defaultValue
+	}
+	return value
+}
+
 func main() {
+	host := GetEnv("HOST_NAME", "localhost")
+	port, err := strconv.Atoi(GetEnv("BACKEND_PORT", "8080"))
+	if err != nil {
+		log.Fatalf("Error fetching port from ENV: %v", err)
+	}
+
 	addr := net.UDPAddr{
-		Port: 8080,
-		IP:   net.ParseIP("server"),
+		Port: port,
+		IP:   net.ParseIP(host),
 	}
 	conn, err := net.ListenUDP("udp", &addr)
 	if err != nil {
@@ -16,7 +33,7 @@ func main() {
 		return
 	}
 	defer conn.Close()
-	fmt.Println("UDP server listening on port 8080")
+	fmt.Printf("UDP server listening on port %v\n", port)
 
 	buf := make([]byte, 1024)
 

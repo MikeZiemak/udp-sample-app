@@ -6,6 +6,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -13,8 +14,19 @@ type Message struct {
 	Content string
 }
 
+func GetEnv(key, defaultValue string) string {
+	value, ok := os.LookupEnv(key)
+	if !ok {
+		return defaultValue
+	}
+	return value
+}
+
 func udpClient(message string) (string, error) {
-	serverAddr, err := net.ResolveUDPAddr("udp", "server:8080")
+	serverHost := GetEnv("BACKEND_HOST", "localhost")
+	serverPort := GetEnv("BACKEND_PORT", "8080")
+
+	serverAddr, err := net.ResolveUDPAddr("udp", fmt.Sprintf("%s:%s", serverHost, serverPort))
 	if err != nil {
 		return "", fmt.Errorf("error resolving server address: %v", err)
 	}
@@ -81,7 +93,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/", handler)
-	log.Println("Starting web server on port 8081")
-	log.Fatal(http.ListenAndServe(":8081", nil))
+	webPort := GetEnv("WEB_PORT", "8081")
+	log.Printf("Starting web server on port %v \n", webPort)
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", webPort), nil))
 }
 
