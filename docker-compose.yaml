@@ -30,6 +30,18 @@ services:
     networks:
       - app-network
 
+  mock:
+    build:
+      context: ./mock-client
+      dockerfile: Dockerfile
+      args: 
+        TARGETARCH: amd64
+    environment:
+      - WEB_HOST=web
+      - WEB_PORT=8081
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge
