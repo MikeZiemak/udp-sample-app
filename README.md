@@ -7,7 +7,7 @@ The client app will be available on `localhost:8081` and the server will be usin
 ---
 
 ### Docker-Compose
-Pretty self-explanatory
+Architecture is set to amd64 by default. To build for alternative architectures see Bulk build section.
 
 Build & run:
 ```sh
@@ -16,6 +16,11 @@ docker-compose up -d
 Force rebuild:
 ```sh
 docker-compose up --force-recreate --build
+```
+
+Bulk build with explicitly defined target architecture:
+```sh
+docker compose build --build-arg TARGETARCH=<ARCHITECTURE> --no-cache
 ```
 
 ---
